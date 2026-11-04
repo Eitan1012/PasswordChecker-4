@@ -13,6 +13,10 @@ public partial class Form1 : Form
     {
         InitializeComponent();
         Text = "Password Checker";
+        ClientSize = new Size(440, 760);
+        StartPosition = FormStartPosition.CenterScreen;
+        FormBorderStyle = FormBorderStyle.FixedSingle;
+        MaximizeBox = false;
         TextBox passwordBox = new TextBox();
         passwordBox.Location = new Point(30, 30);
         passwordBox.Width = 300;
@@ -167,5 +171,41 @@ public partial class Form1 : Form
             settingsForm.ShowDialog();
 
         };  
+        Panel welcomePanel = new Panel();
+        welcomePanel.Dock = DockStyle.Fill;
+        welcomePanel.BackColor = Color.FromArgb(16, 24, 40);
+        Controls.Add(welcomePanel);
+        welcomePanel.BringToFront();
+        Label welcomeTitle = new Label();
+        welcomeTitle.Text = "Password Checker";
+        welcomeTitle.Font = new Font("Segoe UI", 24, FontStyle.Bold);
+        welcomeTitle.ForeColor = Color.White;
+        welcomeTitle.AutoSize = true;
+        welcomeTitle.Location = new Point(45, 180);
+        welcomePanel.Controls.Add(welcomeTitle);
+        Label welcomeSlogan = new Label();
+        welcomeSlogan.Text = "Your shortcut to safer passwords";
+        welcomeSlogan.Font = new Font("Segoe UI", 11);
+        welcomeSlogan.ForeColor = Color.LightGray;
+        welcomeSlogan.AutoSize = true;
+        welcomeSlogan.Location = new Point(45, 235);
+        welcomePanel.Controls.Add(welcomeSlogan);
+        welcomeSlogan.Left = welcomeTitle.Left + (welcomeTitle.Width - welcomeSlogan.Width) / 2;
+        Button getStartedButton = new Button();
+        getStartedButton.Text = "Get Started";
+        getStartedButton.Font = new Font("Segoe UI", 13, FontStyle.Bold);
+        getStartedButton.ForeColor = Color.FromArgb(16, 24, 40);
+        getStartedButton.BackColor = Color.FromArgb(65, 211, 170);
+        getStartedButton.FlatStyle = FlatStyle.Flat;
+        getStartedButton.FlatAppearance.BorderSize = 0;
+        getStartedButton.Size = new Size(250, 55);
+        getStartedButton.Location = new Point(95, 350);
+        getStartedButton.Cursor = Cursors.Hand;
+        welcomePanel.Controls.Add(getStartedButton);
+        getStartedButton.Click += (sender, e) =>
+        {
+            settingsButton.PerformClick();
+            welcomePanel.Visible = false;
+        };
     }
 }
