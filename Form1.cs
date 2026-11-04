@@ -2,6 +2,12 @@ namespace PasswordChecker;
 
 public partial class Form1 : Form
 {
+    private int minimumPasswordLength = 12;
+    private bool requireUppercaseSetting = true;
+    private bool requireLowercaseSetting = true;
+    private bool requireNumberSetting = true;
+    private bool requireSpecialSetting = true;
+
     public Form1()
     {
         InitializeComponent();
@@ -26,7 +32,7 @@ public partial class Form1 : Form
             NumericUpDown minLengthInput = new NumericUpDown();
             minLengthInput.Minimum = 4;
             minLengthInput.Maximum = 64;
-            minLengthInput.Value = 12;
+            minLengthInput.Value = minimumPasswordLength;
             minLengthInput.Location = new Point(200, 30);
             minLengthInput.Width = 80;
             settingsForm.Controls.Add(minLengthInput);
@@ -39,26 +45,41 @@ public partial class Form1 : Form
             requireUppercase.Text = "Require Uppercase Letters (A-Z)";
             requireUppercase.Location = new Point(20, 80);
             requireUppercase.AutoSize = true;
-            requireUppercase.Checked = true;
+            requireUppercase.Checked = requireUppercaseSetting;
             settingsForm.Controls.Add(requireUppercase);
             CheckBox requireLowercase = new CheckBox();
             requireLowercase.Text = "Require Lowercase Letters (a-z)";
             requireLowercase.Location = new Point(20, 110);
             requireLowercase.AutoSize = true;
-            requireLowercase.Checked = true;
+            requireLowercase.Checked = requireLowercaseSetting;
             settingsForm.Controls.Add(requireLowercase);
             CheckBox requireNumber = new CheckBox();
             requireNumber.Text = "Require Numbers (0-9)";
             requireNumber.Location = new Point(20, 140);
             requireNumber.AutoSize = true;
-            requireNumber.Checked = true;
+            requireNumber.Checked = requireNumberSetting;
             settingsForm.Controls.Add(requireNumber);
             CheckBox requireSpecial = new CheckBox();
             requireSpecial.Text = "Require Special Characters (!@#$)";
             requireSpecial.Location = new Point(20, 170);
             requireSpecial.AutoSize = true;
-            requireSpecial.Checked = true;
+            requireSpecial.Checked = requireSpecialSetting;
             settingsForm.Controls.Add(requireSpecial);
+            Button saveButton = new Button();
+            saveButton.Text = "Save Settings";
+            saveButton.Location = new Point(120, 230);
+            saveButton.Size = new Size(130, 40);
+            settingsForm.Controls.Add(saveButton);
+            saveButton.Click += (sender, e) =>
+            {
+                minimumPasswordLength = (int)minLengthInput.Value;
+                requireUppercaseSetting = requireUppercase.Checked;
+                requireLowercaseSetting = requireLowercase.Checked;
+                requireNumberSetting = requireNumber.Checked;
+                requireSpecialSetting = requireSpecial.Checked;
+                settingsForm.Close();
+            };  
+            
             settingsForm.ShowDialog();
 
         };  
