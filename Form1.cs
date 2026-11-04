@@ -17,6 +17,55 @@ public partial class Form1 : Form
         passwordBox.Width = 300;
         passwordBox.UseSystemPasswordChar = true;
         Controls.Add(passwordBox);
+        FlowLayoutPanel requirementsPanel = new FlowLayoutPanel();
+        requirementsPanel.Location = new Point(30, 130);
+        requirementsPanel.Size = new Size(320, 180);
+        requirementsPanel.FlowDirection = FlowDirection.TopDown;
+        requirementsPanel.WrapContents = false;
+        requirementsPanel.AutoScroll = true;
+        Controls.Add(requirementsPanel);
+        void RefreshRequirments()
+        {
+         requirementsPanel.Controls.Clear();
+         void AddRequirement(string text, bool isValid = false)
+            {
+                
+                Label label = new Label();
+                label.Text = (isValid ? "✓ " : "✗ ") + text;
+                label.ForeColor = isValid ? Color.Green : Color.Red;
+                label.AutoSize = true;
+                label.Margin = new Padding(3, 5, 3, 5);
+                requirementsPanel.Controls.Add(label);
+            }   
+            bool isLengthValid = passwordBox.Text.Length >= minimumPasswordLength;
+            AddRequirement("At least " + minimumPasswordLength + " characters", isLengthValid);
+
+            if (requireUppercaseSetting)
+            {
+                bool hasUppercase = passwordBox.Text.Any(c => c >= 'A' && c <= 'Z');
+                AddRequirement("At least one uppercase letter (A-Z)", hasUppercase);
+            }
+            if (requireLowercaseSetting)
+            {
+                bool hasLowercase = passwordBox.Text.Any(c => c >= 'a' && c <= 'z');
+                AddRequirement("At least one lowercase letter (a-z)", hasLowercase);
+            }
+            if (requireNumberSetting)
+            {
+                bool hasNumber = passwordBox.Text.Any(c => c >= '0' && c <= '9');
+                AddRequirement("At least one number (0-9)", hasNumber);
+            }
+            if (requireSpecialSetting)
+            {
+                bool hasSpecial = passwordBox.Text.Any(c => "!@#$%".Contains(c));
+                AddRequirement("At least one special character (!@#$%)", hasSpecial);
+            }
+        }
+        RefreshRequirments();
+        passwordBox.TextChanged += (sender, e) =>
+        {
+            RefreshRequirments();
+        };
         Button settingsButton = new Button();
         settingsButton.Text = "";
         settingsButton.BackgroundImage = Image.FromFile(Path.Combine(Application.StartupPath, "Images", "settings_gear.png"));
@@ -60,7 +109,7 @@ public partial class Form1 : Form
             requireNumber.Checked = requireNumberSetting;
             settingsForm.Controls.Add(requireNumber);
             CheckBox requireSpecial = new CheckBox();
-            requireSpecial.Text = "Require Special Characters (!@#$)";
+            requireSpecial.Text = "Require Special Characters (!@#$%)";
             requireSpecial.Location = new Point(20, 170);
             requireSpecial.AutoSize = true;
             requireSpecial.Checked = requireSpecialSetting;
@@ -77,6 +126,7 @@ public partial class Form1 : Form
                 requireLowercaseSetting = requireLowercase.Checked;
                 requireNumberSetting = requireNumber.Checked;
                 requireSpecialSetting = requireSpecial.Checked;
+                RefreshRequirments();
                 settingsForm.Close();
             };  
             
