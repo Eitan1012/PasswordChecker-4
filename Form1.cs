@@ -115,7 +115,9 @@ public partial class Form1 : Form
         {
             Form settingsForm = new Form();
             settingsForm.Text = " Password Settings";
-            settingsForm.Size = new Size(400, 350);
+            settingsForm.Size = new Size(440, 760);
+            settingsForm.StartPosition = FormStartPosition.CenterParent;
+            settingsForm.FormBorderStyle = FormBorderStyle.FixedSingle;
             NumericUpDown minLengthInput = new NumericUpDown();
             minLengthInput.Minimum = 4;
             minLengthInput.Maximum = 64;
@@ -202,10 +204,97 @@ public partial class Form1 : Form
         getStartedButton.Location = new Point(95, 350);
         getStartedButton.Cursor = Cursors.Hand;
         welcomePanel.Controls.Add(getStartedButton);
+                    Panel settingsPanel = new Panel();
+            settingsPanel.Dock = DockStyle.Fill;
+            settingsPanel.BackColor = Color.FromArgb(16, 24, 40);
+            settingsPanel.Visible = false;
+            Controls.Add(settingsPanel);
+            Label settingsTitle = new Label();
+            settingsTitle.Text = "Password Settings";
+            settingsTitle.Font = new Font("Segoe UI", 24, FontStyle.Bold);
+            settingsTitle.ForeColor = Color.White;
+            settingsTitle.AutoSize = true;
+            settingsTitle.Location = new Point(40, 85);
+            settingsPanel.Controls.Add(settingsTitle);
+            Label minLengthSettingsLabel = new Label();
+            minLengthSettingsLabel.Text = "Minimum Length:";
+            minLengthSettingsLabel.Font = new Font("Segoe UI", 12);
+            minLengthSettingsLabel.ForeColor = Color.White;
+            minLengthSettingsLabel.AutoSize = true;
+            minLengthSettingsLabel.Location = new Point(40, 185);
+            settingsPanel.Controls.Add(minLengthSettingsLabel);
+            NumericUpDown minLengthSettingsInput = new NumericUpDown();
+            minLengthSettingsInput.Minimum = 4;
+            minLengthSettingsInput.Maximum = 64;
+            minLengthSettingsInput.Value = minimumPasswordLength;
+            minLengthSettingsInput.Font = new Font("Segoe UI", 11);
+            minLengthSettingsInput.Location = new Point(300, 183);
+            minLengthSettingsInput.Size = new Size(85, 30);
+            settingsPanel.Controls.Add(minLengthSettingsInput);
+            CheckBox requireUppercaseSettings = new CheckBox();
+            requireUppercaseSettings.Text = "Require Uppercase Letters (A-Z)";
+            requireUppercaseSettings.Font = new Font("Segoe UI", 12);
+            requireUppercaseSettings.ForeColor = Color.White;
+            requireUppercaseSettings.BackColor = Color.Transparent;
+            requireUppercaseSettings.Location = new Point(40, 260);
+            requireUppercaseSettings.AutoSize = true;
+            requireUppercaseSettings.Checked = requireUppercaseSetting;
+            settingsPanel.Controls.Add(requireUppercaseSettings);
+            CheckBox requireLowercaseSettings = new CheckBox();
+            requireLowercaseSettings.Text = "Require Lowercase Letters (a-z)";
+            requireLowercaseSettings.Font = new Font("Segoe UI", 12);
+            requireLowercaseSettings.ForeColor = Color.White;
+            requireLowercaseSettings.BackColor = Color.Transparent;
+            requireLowercaseSettings.Location = new Point(40, 300);
+            requireLowercaseSettings.AutoSize = true;
+            requireLowercaseSettings.Checked = requireLowercaseSetting;
+            settingsPanel.Controls.Add(requireLowercaseSettings);
+            CheckBox requireNumberSettings = new CheckBox();
+            requireNumberSettings.Text = "Require Numbers (0-9)";
+            requireNumberSettings.Font = new Font("Segoe UI", 12);
+            requireNumberSettings.ForeColor = Color.White;
+            requireNumberSettings.BackColor = Color.Transparent;
+            requireNumberSettings.Location = new Point(40, 340);
+            requireNumberSettings.AutoSize = true;
+            requireNumberSettings.Checked = requireNumberSetting;
+            settingsPanel.Controls.Add(requireNumberSettings);
+            CheckBox requireSpecialSettings = new CheckBox();
+            requireSpecialSettings.Text = "Require Special Characters (!@#$%)";
+            requireSpecialSettings.Font = new Font("Segoe UI", 12);
+            requireSpecialSettings.ForeColor = Color.White;
+            requireSpecialSettings.BackColor = Color.Transparent;
+            requireSpecialSettings.Location = new Point(40, 380);
+            requireSpecialSettings.AutoSize = true;
+            requireSpecialSettings.Checked = requireSpecialSetting;
+            settingsPanel.Controls.Add(requireSpecialSettings);
+            Button saveContinueButton = new Button();
+            saveContinueButton.Text = "Save & Continue";
+            saveContinueButton.Font = new Font("Segoe UI", 13, FontStyle.Bold);
+            saveContinueButton.ForeColor = Color.FromArgb(16, 24, 40);
+            saveContinueButton.BackColor = Color.FromArgb(65, 211, 170);
+            saveContinueButton.FlatStyle = FlatStyle.Flat;
+            saveContinueButton.FlatAppearance.BorderSize = 0;
+            saveContinueButton.Size = new Size(250, 55);
+            saveContinueButton.Location = new Point(95, 520);
+            saveContinueButton.Cursor = Cursors.Hand;
+            settingsPanel.Controls.Add(saveContinueButton);
+            saveContinueButton.Click += (sender, e) =>
+            {
+                minimumPasswordLength = (int)minLengthSettingsInput.Value;
+                requireUppercaseSetting = requireUppercaseSettings.Checked;
+                requireLowercaseSetting = requireLowercaseSettings.Checked;
+                requireNumberSetting = requireNumberSettings.Checked;
+                requireSpecialSetting = requireSpecialSettings.Checked;
+                RefreshRequirments();
+                settingsPanel.Visible = false;
+            };
+
+
         getStartedButton.Click += (sender, e) =>
         {
-            settingsButton.PerformClick();
             welcomePanel.Visible = false;
+            settingsPanel.Visible = true;
+            settingsPanel.BringToFront();
         };
     }
 }
