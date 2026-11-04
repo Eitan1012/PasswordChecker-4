@@ -111,68 +111,42 @@ public partial class Form1 : Form
         settingsButton.Location = new Point(30, 70);
         settingsButton.Size = new Size(40, 40);
         Controls.Add(settingsButton);
-        settingsButton.Click += (sender, e) =>
-        {
-            Form settingsForm = new Form();
-            settingsForm.Text = " Password Settings";
-            settingsForm.Size = new Size(440, 760);
-            settingsForm.StartPosition = FormStartPosition.CenterParent;
-            settingsForm.FormBorderStyle = FormBorderStyle.FixedSingle;
-            NumericUpDown minLengthInput = new NumericUpDown();
-            minLengthInput.Minimum = 4;
-            minLengthInput.Maximum = 64;
-            minLengthInput.Value = minimumPasswordLength;
-            minLengthInput.Location = new Point(200, 30);
-            minLengthInput.Width = 80;
-            settingsForm.Controls.Add(minLengthInput);
-            Label minLengthLabel = new Label();
-            minLengthLabel.Text = "Minimum Password Length:";
-            minLengthLabel.Location = new Point(20, 33);
-            minLengthLabel.AutoSize = true;
-            settingsForm.Controls.Add(minLengthLabel);
-            CheckBox requireUppercase = new CheckBox();
-            requireUppercase.Text = "Require Uppercase Letters (A-Z)";
-            requireUppercase.Location = new Point(20, 80);
-            requireUppercase.AutoSize = true;
-            requireUppercase.Checked = requireUppercaseSetting;
-            settingsForm.Controls.Add(requireUppercase);
-            CheckBox requireLowercase = new CheckBox();
-            requireLowercase.Text = "Require Lowercase Letters (a-z)";
-            requireLowercase.Location = new Point(20, 110);
-            requireLowercase.AutoSize = true;
-            requireLowercase.Checked = requireLowercaseSetting;
-            settingsForm.Controls.Add(requireLowercase);
-            CheckBox requireNumber = new CheckBox();
-            requireNumber.Text = "Require Numbers (0-9)";
-            requireNumber.Location = new Point(20, 140);
-            requireNumber.AutoSize = true;
-            requireNumber.Checked = requireNumberSetting;
-            settingsForm.Controls.Add(requireNumber);
-            CheckBox requireSpecial = new CheckBox();
-            requireSpecial.Text = "Require Special Characters (!@#$%)";
-            requireSpecial.Location = new Point(20, 170);
-            requireSpecial.AutoSize = true;
-            requireSpecial.Checked = requireSpecialSetting;
-            settingsForm.Controls.Add(requireSpecial);
-            Button saveButton = new Button();
-            saveButton.Text = "Save Settings";
-            saveButton.Location = new Point(120, 230);
-            saveButton.Size = new Size(130, 40);
-            settingsForm.Controls.Add(saveButton);
-            saveButton.Click += (sender, e) =>
-            {
-                minimumPasswordLength = (int)minLengthInput.Value;
-                requireUppercaseSetting = requireUppercase.Checked;
-                requireLowercaseSetting = requireLowercase.Checked;
-                requireNumberSetting = requireNumber.Checked;
-                requireSpecialSetting = requireSpecial.Checked;
-                RefreshRequirments();
-                settingsForm.Close();
-            };  
-            
-            settingsForm.ShowDialog();
 
-        };  
+        Panel checkerPanel = new Panel();
+        checkerPanel.Dock = DockStyle.Fill;
+        checkerPanel.BackColor = Color.FromArgb(16, 24, 40);
+        Controls.Add(checkerPanel);
+        checkerPanel.Controls.Add(passwordBox);
+        checkerPanel.Controls.Add(eyeButton);
+        checkerPanel.Controls.Add(copyButton);
+        checkerPanel.Controls.Add(requirementsPanel);
+        checkerPanel.Controls.Add(settingsButton);
+        settingsButton.Location = new Point(370, 35);
+        passwordBox.Location = new Point(40, 200);
+        passwordBox.Width = 280;
+        eyeButton.Location = new Point(325, 200);
+        copyButton.Location = new Point(370, 200);
+        eyeButton.Size = new Size(40, 40);
+        eyeButton.BackColor = Color.FromArgb(65, 211, 170);
+        eyeButton.ForeColor = Color.FromArgb(16, 24, 40);
+        eyeButton.Font = new Font("Segoe UI Emoji", 15);
+        eyeButton.FlatStyle = FlatStyle.Flat;
+        eyeButton.FlatAppearance.BorderSize = 0;
+        copyButton.Size = new Size(40, 40);
+        copyButton.BackColor = Color.FromArgb(65, 211, 170);
+        copyButton.ForeColor = Color.FromArgb(16, 24, 40);
+        copyButton.Font = new Font("Segoe Fluent Icons", 16);
+        copyButton.FlatStyle = FlatStyle.Flat;
+        copyButton.FlatAppearance.BorderSize = 0;
+        requirementsPanel.Location = new Point(40, 280);
+        Label checkerTitle = new Label();
+        checkerTitle.Text = "Check Your Password";
+        checkerTitle.Font = new Font("Segoe UI", 22, FontStyle.Bold);
+        checkerTitle.ForeColor = Color.White;
+        checkerTitle.AutoSize = true;
+        checkerTitle.Location = new Point(40, 115);
+        checkerPanel.Controls.Add(checkerTitle);
+
         Panel welcomePanel = new Panel();
         welcomePanel.Dock = DockStyle.Fill;
         welcomePanel.BackColor = Color.FromArgb(16, 24, 40);
@@ -216,6 +190,23 @@ public partial class Form1 : Form
             settingsTitle.AutoSize = true;
             settingsTitle.Location = new Point(40, 85);
             settingsPanel.Controls.Add(settingsTitle);
+            Button backButton = new Button();
+            backButton.Text = "→";
+            backButton.Font = new Font("Segoe UI", 18);
+            backButton.ForeColor = Color.LightGray;
+            backButton.BackColor = Color.FromArgb(16, 24, 40);
+            backButton.FlatStyle = FlatStyle.Flat;
+            backButton.FlatAppearance.BorderSize = 0;
+            backButton.Size = new Size(40, 40);
+            backButton.Location = new Point(375, 25);
+            backButton.Cursor = Cursors.Hand;
+            settingsPanel.Controls.Add(backButton);
+            backButton.Click += (sender, e) =>
+            {
+                settingsPanel.Visible = false;
+                welcomePanel.Visible = true;
+                welcomePanel.BringToFront();
+            };
             Label minLengthSettingsLabel = new Label();
             minLengthSettingsLabel.Text = "Minimum Length:";
             minLengthSettingsLabel.Font = new Font("Segoe UI", 12);
@@ -293,6 +284,16 @@ public partial class Form1 : Form
         getStartedButton.Click += (sender, e) =>
         {
             welcomePanel.Visible = false;
+            settingsPanel.Visible = true;
+            settingsPanel.BringToFront();
+        };
+        settingsButton.Click += (sender, e) =>
+        {
+            minLengthSettingsInput.Value = minimumPasswordLength;
+            requireUppercaseSettings.Checked = requireUppercaseSetting;
+            requireLowercaseSettings.Checked = requireLowercaseSetting;
+            requireNumberSettings.Checked = requireNumberSetting;
+            requireSpecialSettings.Checked = requireSpecialSetting;
             settingsPanel.Visible = true;
             settingsPanel.BringToFront();
         };
