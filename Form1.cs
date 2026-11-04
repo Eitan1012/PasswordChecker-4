@@ -7,6 +7,7 @@ public partial class Form1 : Form
     private bool requireLowercaseSetting = true;
     private bool requireNumberSetting = true;
     private bool requireSpecialSetting = true;
+    private bool wasPasswordValid = false;
 
     public Form1()
     {
@@ -17,6 +18,28 @@ public partial class Form1 : Form
         passwordBox.Width = 300;
         passwordBox.UseSystemPasswordChar = true;
         Controls.Add(passwordBox);
+        Button eyeButton = new Button();
+        eyeButton.Text = "👁";
+        eyeButton.Location = new Point(335, 30);
+        eyeButton.Size = new Size(40, 25);
+        eyeButton.Click += (sender, e) =>
+        {
+            passwordBox.UseSystemPasswordChar = !passwordBox.UseSystemPasswordChar;
+        };
+        Controls.Add(eyeButton);
+        Button copyButton = new Button();
+        copyButton.Font = new Font("Segoe Fluent Icons", 10);
+        copyButton.Text = "\uE8C8"; // Unicode for copy icon
+        copyButton.Location = new Point(380, 30);
+        copyButton.Size = new Size(40, 25);
+        copyButton.Click += (sender, e) =>
+        {
+            if (!string.IsNullOrEmpty(passwordBox.Text))
+            {
+                Clipboard.SetText(passwordBox.Text);
+            }
+        };
+        Controls.Add(copyButton);
         FlowLayoutPanel requirementsPanel = new FlowLayoutPanel();
         requirementsPanel.Location = new Point(30, 130);
         requirementsPanel.Size = new Size(320, 180);
@@ -27,9 +50,10 @@ public partial class Form1 : Form
         void RefreshRequirments()
         {
          requirementsPanel.Controls.Clear();
+         bool allRequirementsValid = true;
          void AddRequirement(string text, bool isValid = false)
             {
-                
+                allRequirementsValid &= isValid;
                 Label label = new Label();
                 label.Text = (isValid ? "✓ " : "✗ ") + text;
                 label.ForeColor = isValid ? Color.Green : Color.Red;
@@ -60,6 +84,16 @@ public partial class Form1 : Form
                 bool hasSpecial = passwordBox.Text.Any(c => "!@#$%".Contains(c));
                 AddRequirement("At least one special character (!@#$%)", hasSpecial);
             }
+            if (allRequirementsValid && !wasPasswordValid)
+            {
+                MessageBox.Show("Password is valid!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                wasPasswordValid = true;
+            }
+            else if (!allRequirementsValid)
+            {
+                wasPasswordValid = false;
+            }
+
         }
         RefreshRequirments();
         passwordBox.TextChanged += (sender, e) =>
