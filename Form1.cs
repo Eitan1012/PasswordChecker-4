@@ -104,13 +104,7 @@ public partial class Form1 : Form
         {
             RefreshRequirments();
         };
-        Button settingsButton = new Button();
-        settingsButton.Text = "";
-        settingsButton.BackgroundImage = Image.FromFile(Path.Combine(Application.StartupPath, "Images", "settings_gear.png"));
-        settingsButton.BackgroundImageLayout = ImageLayout.Zoom;
-        settingsButton.Location = new Point(30, 70);
-        settingsButton.Size = new Size(40, 40);
-        Controls.Add(settingsButton);
+
 
         Panel checkerPanel = new Panel();
         checkerPanel.Dock = DockStyle.Fill;
@@ -120,8 +114,6 @@ public partial class Form1 : Form
         checkerPanel.Controls.Add(eyeButton);
         checkerPanel.Controls.Add(copyButton);
         checkerPanel.Controls.Add(requirementsPanel);
-        checkerPanel.Controls.Add(settingsButton);
-        settingsButton.Location = new Point(370, 35);
         passwordBox.Location = new Point(40, 200);
         passwordBox.Width = 280;
         eyeButton.Location = new Point(325, 200);
@@ -272,6 +264,7 @@ public partial class Form1 : Form
             Panel choicePanel = new Panel();
             choicePanel.Dock = DockStyle.Fill;
             choicePanel.BackColor = Color.FromArgb(16, 24, 40);
+            choicePanel.Visible = false;
             Controls.Add(choicePanel);
             Label choiceTitle = new Label();
             choiceTitle.Text = "Choose Your Path";
@@ -302,9 +295,44 @@ public partial class Form1 : Form
             generatePasswordButton.Location = new Point(45, 420);
             generatePasswordButton.Cursor = Cursors.Hand;
             choicePanel.Controls.Add(generatePasswordButton);
+            Button chiceBackButton = new Button();
+            chiceBackButton.Text = "→";
+            chiceBackButton.Font = new Font("Segoe UI", 18);
+            chiceBackButton.ForeColor = Color.LightGray;
+            chiceBackButton.BackColor = Color.FromArgb(16, 24, 40);
+            chiceBackButton.FlatStyle = FlatStyle.Flat;
+            chiceBackButton.FlatAppearance.BorderSize = 0;
+            chiceBackButton.Size = new Size(40, 40);
+            chiceBackButton.Location = new Point(375, 25);
+            chiceBackButton.Cursor = Cursors.Hand;
+            choicePanel.Controls.Add(chiceBackButton);
+            chiceBackButton.Click += (sender, e) =>
+            {
+                choicePanel.Visible = false;
+                settingsPanel.Visible = true;
+                settingsPanel.BringToFront();
+            };
+            Button checkerBackButton = new Button();
+            checkerBackButton.Text = "→";
+            checkerBackButton.Font = new Font("Segoe UI", 18);
+            checkerBackButton.ForeColor = Color.LightGray;
+            checkerBackButton.BackColor = Color.FromArgb(16, 24, 40);
+            checkerBackButton.FlatStyle = FlatStyle.Flat;
+            checkerBackButton.FlatAppearance.BorderSize = 0;
+            checkerBackButton.Size = new Size(40, 40);
+            checkerBackButton.Location = new Point(375, 25);
+            checkerBackButton.Cursor = Cursors.Hand;
+            checkerPanel.Controls.Add(checkerBackButton);
+            checkerBackButton.Click += (sender, e) =>
+            {
+                checkerPanel.Visible = false;
+                choicePanel.Visible = true;
+                choicePanel.BringToFront();
+            };
             Panel generatedPasswordPanel = new Panel();
             generatedPasswordPanel.Dock = DockStyle.Fill;
             generatedPasswordPanel.BackColor = Color.FromArgb(16, 24, 40);
+            generatedPasswordPanel.Visible = false;
             Controls.Add(generatedPasswordPanel);
             Label generatedPasswordTitle = new Label();
             generatedPasswordTitle.Text = "Generate Password";
@@ -313,6 +341,23 @@ public partial class Form1 : Form
             generatedPasswordTitle.AutoSize = true;
             generatedPasswordTitle.Location = new Point(40, 150);
             generatedPasswordPanel.Controls.Add(generatedPasswordTitle);
+            Button generatorBackButton = new Button();
+            generatorBackButton.Text = "→";
+            generatorBackButton.Font = new Font("Segoe UI", 18);
+            generatorBackButton.ForeColor = Color.LightGray;
+            generatorBackButton.BackColor = Color.FromArgb(16, 24, 40);
+            generatorBackButton.FlatStyle = FlatStyle.Flat;
+            generatorBackButton.FlatAppearance.BorderSize = 0;
+            generatorBackButton.Size = new Size(40, 40);
+            generatorBackButton.Location = new Point(375, 25);
+            generatorBackButton.Cursor = Cursors.Hand;
+            generatedPasswordPanel.Controls.Add(generatorBackButton);
+            generatorBackButton.Click += (sender, e) =>
+            {
+                generatedPasswordPanel.Visible = false;
+                choicePanel.Visible = true;
+                choicePanel.BringToFront();
+            };
             Label generatedPasswordLabel = new Label();
             generatedPasswordLabel.Text = "Your Generated Password:";
             generatedPasswordLabel.Font = new Font("Segoe UI", 12);
@@ -421,6 +466,7 @@ public partial class Form1 : Form
             checkPasswordButton.Click += (sender, e) =>
             {
                 choicePanel.Visible = false;
+                checkerPanel.Visible = true;
                 checkerPanel.BringToFront();
             };
             saveContinueButton.Click += (sender, e) =>
@@ -446,17 +492,7 @@ public partial class Form1 : Form
             settingsPanel.Visible = true;
             settingsPanel.BringToFront();
         };
-        settingsButton.Click += (sender, e) =>
-        {
-            minLengthSettingsInput.Value = minimumPasswordLength;
-            requireUppercaseSettings.Checked = requireUppercaseSetting;
-            requireLowercaseSettings.Checked = requireLowercaseSetting;
-            requireNumberSettings.Checked = requireNumberSetting;
-            requireSpecialSettings.Checked = requireSpecialSetting;
-            welcomePanel.Visible = false;   
-            settingsPanel.Visible = true;
-            settingsPanel.BringToFront();
-        };
+
     }
 
 }
