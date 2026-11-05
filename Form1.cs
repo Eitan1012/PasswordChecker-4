@@ -302,6 +302,122 @@ public partial class Form1 : Form
             generatePasswordButton.Location = new Point(45, 420);
             generatePasswordButton.Cursor = Cursors.Hand;
             choicePanel.Controls.Add(generatePasswordButton);
+            Panel generatedPasswordPanel = new Panel();
+            generatedPasswordPanel.Dock = DockStyle.Fill;
+            generatedPasswordPanel.BackColor = Color.FromArgb(16, 24, 40);
+            Controls.Add(generatedPasswordPanel);
+            Label generatedPasswordTitle = new Label();
+            generatedPasswordTitle.Text = "Generate Password";
+            generatedPasswordTitle.Font = new Font("Segoe UI", 24, FontStyle.Bold);
+            generatedPasswordTitle.ForeColor = Color.White;
+            generatedPasswordTitle.AutoSize = true;
+            generatedPasswordTitle.Location = new Point(40, 150);
+            generatedPasswordPanel.Controls.Add(generatedPasswordTitle);
+            Label generatedPasswordLabel = new Label();
+            generatedPasswordLabel.Text = "Your Generated Password:";
+            generatedPasswordLabel.Font = new Font("Segoe UI", 12);
+            generatedPasswordLabel.ForeColor = Color.White;
+            generatedPasswordLabel.AutoSize = true;
+            generatedPasswordLabel.Location = new Point(40, 250);
+            generatedPasswordPanel.Controls.Add(generatedPasswordLabel);
+            TextBox generatedPasswordBox = new TextBox();
+            generatedPasswordBox.Location = new Point(40, 290);
+            generatedPasswordBox.Size = new Size(360, 35);
+            generatedPasswordBox.Font = new Font("Segoe UI", 13);
+            generatedPasswordBox.ReadOnly = true;
+            generatedPasswordBox.BackColor = Color.FromArgb(30, 40, 58);
+            generatedPasswordBox.ForeColor = Color.White;
+            generatedPasswordPanel.Controls.Add(generatedPasswordBox);
+            Button generateNewButton = new Button();
+            generateNewButton.Text = "Generate";
+            generateNewButton.Font = new Font("Segoe UI", 13, FontStyle.Bold);
+            generateNewButton.BackColor = Color.FromArgb(65, 211, 170);
+            generateNewButton.ForeColor = Color.FromArgb(16, 24, 40);
+            generateNewButton.FlatStyle = FlatStyle.Flat;
+            generateNewButton.FlatAppearance.BorderSize = 0;
+            generateNewButton.Size = new Size(170, 55);
+            generateNewButton.Location = new Point(40, 360);
+            generateNewButton.Cursor = Cursors.Hand;
+            generatedPasswordPanel.Controls.Add(generateNewButton);
+            Button copyGeneratedButton = new Button();
+            copyGeneratedButton.Text = "Copy";
+            copyGeneratedButton.Font = new Font("Segoe UI", 13, FontStyle.Bold);
+            copyGeneratedButton.BackColor = Color.FromArgb(65, 211, 170);
+            copyGeneratedButton.ForeColor = Color.FromArgb(16, 24, 40);
+            copyGeneratedButton.FlatStyle = FlatStyle.Flat;
+            copyGeneratedButton.FlatAppearance.BorderSize = 0;
+            copyGeneratedButton.Size = new Size(170, 55);
+            copyGeneratedButton.Location = new Point(230, 360);
+            copyGeneratedButton.Cursor = Cursors.Hand;
+            generatedPasswordPanel.Controls.Add(copyGeneratedButton);
+            void GenerateNewPassword()
+        {
+            string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string lowercase = "abcdefghijklmnopqrstuvwxyz";
+            string numbers = "0123456789";
+            string special = "!@#$%";
+            string allowedCharacters = "";
+            List<char> passwordCharacters = new List<char>();
+            char GenerateRandomCharacter(string characters)
+            {
+                int index = System.Security.Cryptography.RandomNumberGenerator.GetInt32(characters.Length);
+                return characters[index];
+
+            }
+            if (requireUppercaseSetting)
+            {
+                allowedCharacters += uppercase;
+                passwordCharacters.Add(GenerateRandomCharacter(uppercase));
+            }
+            if (requireLowercaseSetting)
+            {
+                allowedCharacters += lowercase;
+                passwordCharacters.Add(GenerateRandomCharacter(lowercase));
+            }
+            if (requireNumberSetting)
+            {
+                allowedCharacters += numbers;
+                passwordCharacters.Add(GenerateRandomCharacter(numbers));
+            }
+            if (requireSpecialSetting)
+            {
+                allowedCharacters += special;
+                passwordCharacters.Add(GenerateRandomCharacter(special));
+            }
+            if (allowedCharacters.Length == 0)
+            {
+                allowedCharacters = uppercase + lowercase + numbers + special;
+            }
+            while (passwordCharacters.Count < minimumPasswordLength)
+            {
+                passwordCharacters.Add(GenerateRandomCharacter(allowedCharacters));
+            }
+            for (int i = passwordCharacters.Count - 1; i > 0; i--)
+            {
+                int j = System.Security.Cryptography.RandomNumberGenerator.GetInt32(i + 1);
+                char temp = passwordCharacters[i];
+                passwordCharacters[i] = passwordCharacters[j];
+                passwordCharacters[j] = temp;
+            }
+            generatedPasswordBox.Text = new string(passwordCharacters.ToArray());
+        }
+        generateNewButton.Click += (sender, e) =>
+        {
+            GenerateNewPassword();
+        };
+        copyGeneratedButton.Click += (sender, e) =>
+        {
+            if (!string.IsNullOrEmpty(generatedPasswordBox.Text))
+            {
+                Clipboard.SetText(generatedPasswordBox.Text);
+            }
+        };
+            generatePasswordButton.Click += (sender, e) =>
+            {
+                choicePanel.Visible = false;
+                generatedPasswordPanel.Visible = true;
+                generatedPasswordPanel.BringToFront();
+            };
             checkPasswordButton.Click += (sender, e) =>
             {
                 choicePanel.Visible = false;
