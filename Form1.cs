@@ -341,6 +341,14 @@ public partial class Form1 : Form
             generatedPasswordTitle.AutoSize = true;
             generatedPasswordTitle.Location = new Point(40, 150);
             generatedPasswordPanel.Controls.Add(generatedPasswordTitle);
+            CheckBox memorableWordsCheckbox = new CheckBox();
+            memorableWordsCheckbox.Text = "Use Memorable Words";
+            memorableWordsCheckbox.Font = new Font("Segoe UI", 12);
+            memorableWordsCheckbox.ForeColor = Color.White;
+            memorableWordsCheckbox.BackColor = Color.Transparent;
+            memorableWordsCheckbox.Location = new Point(40, 205);
+            memorableWordsCheckbox.AutoSize = true;
+            generatedPasswordPanel.Controls.Add(memorableWordsCheckbox);
             Button generatorBackButton = new Button();
             generatorBackButton.Text = "→";
             generatorBackButton.Font = new Font("Segoe UI", 18);
@@ -395,8 +403,56 @@ public partial class Form1 : Form
             copyGeneratedButton.Location = new Point(230, 360);
             copyGeneratedButton.Cursor = Cursors.Hand;
             generatedPasswordPanel.Controls.Add(copyGeneratedButton);
+            void GenerateMemorablePassword()
+        {
+            string filePath = Path.Combine(Application.StartupPath, "eff_large_wordlist.txt");
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("Word list file not found");
+                return;
+            }
+           string[] words = File.ReadAllLines(filePath).Select(line => line.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)).Where(parts => parts.Length == 2).Select(parts => parts[1]).ToArray();
+           if (words.Length != 7776)
+            {
+                MessageBox.Show("Invalid word list");
+                return;
+            }
+            List<string> selectedWords =  new List<string>();
+            string suffix = "";
+            if(requireNumberSetting)
+            {
+                suffix += System.Security.Cryptography.RandomNumberGenerator.GetInt32(10).ToString();
+
+            }
+            if (requireSpecialSetting)
+            {
+                string special = "!@#$%";
+                int index = System.Security.Cryptography.RandomNumberGenerator.GetInt32(special.Length);
+                suffix += special[index];
+                
+            }
+            do
+            {
+                int index = System.Security.Cryptography.RandomNumberGenerator.GetInt32(words.Length);
+                selectedWords.Add(words[index]);
+            }
+            while (selectedWords.Count < 6 || string.Join("-", selectedWords).Length + suffix.Length < minimumPasswordLength);
+            
+            string password = string.Join("-", selectedWords) + suffix;
+            if (requireUppercaseSetting)
+            {
+                password = char.ToUpperInvariant(password[0]) + password.Substring(1); 
+            }
+            generatedPasswordBox.Text = password;
+
+        }
             void GenerateNewPassword()
         {
+            if (memorableWordsCheckbox.Checked)
+            {
+                GenerateMemorablePassword();
+                return;
+            }
             string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string lowercase = "abcdefghijklmnopqrstuvwxyz";
             string numbers = "0123456789";
