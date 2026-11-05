@@ -269,6 +269,44 @@ public partial class Form1 : Form
             saveContinueButton.Location = new Point(95, 520);
             saveContinueButton.Cursor = Cursors.Hand;
             settingsPanel.Controls.Add(saveContinueButton);
+            Panel choicePanel = new Panel();
+            choicePanel.Dock = DockStyle.Fill;
+            choicePanel.BackColor = Color.FromArgb(16, 24, 40);
+            Controls.Add(choicePanel);
+            Label choiceTitle = new Label();
+            choiceTitle.Text = "Choose Your Path";
+            choiceTitle.Font = new Font("Segoe UI", 24, FontStyle.Bold);
+            choiceTitle.ForeColor = Color.White;
+            choiceTitle.AutoSize = true;
+            choiceTitle.Location = new Point(65, 170);
+            choicePanel.Controls.Add(choiceTitle);
+            Button checkPasswordButton = new Button();
+            checkPasswordButton.Text = "Check Password";
+            checkPasswordButton.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            checkPasswordButton.BackColor = Color.FromArgb(65, 211, 170);
+            checkPasswordButton.ForeColor = Color.FromArgb(16, 24, 40);
+            checkPasswordButton.FlatStyle = FlatStyle.Flat;
+            checkPasswordButton.FlatAppearance.BorderSize = 0;
+            checkPasswordButton.Size = new Size(350, 90);
+            checkPasswordButton.Location = new Point(45, 300);
+            checkPasswordButton.Cursor = Cursors.Hand;
+            choicePanel.Controls.Add(checkPasswordButton);
+            Button generatePasswordButton = new Button();
+            generatePasswordButton.Text = "Generate Password";
+            generatePasswordButton.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            generatePasswordButton.BackColor = Color.FromArgb(65, 211, 170);
+            generatePasswordButton.ForeColor = Color.FromArgb(16, 24, 40);
+            generatePasswordButton.FlatStyle = FlatStyle.Flat;
+            generatePasswordButton.FlatAppearance.BorderSize = 0;  
+            generatePasswordButton.Size = new Size(350, 90);
+            generatePasswordButton.Location = new Point(45, 420);
+            generatePasswordButton.Cursor = Cursors.Hand;
+            choicePanel.Controls.Add(generatePasswordButton);
+            checkPasswordButton.Click += (sender, e) =>
+            {
+                choicePanel.Visible = false;
+                checkerPanel.BringToFront();
+            };
             saveContinueButton.Click += (sender, e) =>
             {
                 minimumPasswordLength = (int)minLengthSettingsInput.Value;
@@ -278,6 +316,11 @@ public partial class Form1 : Form
                 requireSpecialSetting = requireSpecialSettings.Checked;
                 RefreshRequirments();
                 settingsPanel.Visible = false;
+                choicePanel.Visible = true;
+                choicePanel.BringToFront();
+
+                
+        
             };
 
 
@@ -294,8 +337,10 @@ public partial class Form1 : Form
             requireLowercaseSettings.Checked = requireLowercaseSetting;
             requireNumberSettings.Checked = requireNumberSetting;
             requireSpecialSettings.Checked = requireSpecialSetting;
+            welcomePanel.Visible = false;   
             settingsPanel.Visible = true;
             settingsPanel.BringToFront();
         };
     }
+
 }
