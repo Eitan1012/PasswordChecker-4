@@ -50,7 +50,7 @@ public partial class Form1 : Form
                 Clipboard.SetText(passwordBox.Text);
             }
         };
-        // Password requirments Panel
+
         Controls.Add(copyButton);
         FlowLayoutPanel requirementsPanel = new FlowLayoutPanel();
         requirementsPanel.Location = new Point(30, 130);

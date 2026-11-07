@@ -1,3 +1,5 @@
 bin/
 obj/
 *.user
+PasswordChecker-v1.0.0-win-x64/
+publish/
